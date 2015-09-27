@@ -17,7 +17,7 @@ public class ItemManager : MonoBehaviour {
         stack.AddQuantity(1);
         s.AddStack(stack);
 
-        foreach (ItemStack itemStack in s.Stacks)
+        foreach (IItemStack itemStack in s.Stacks)
         {
             Debug.Log(itemStack.Quantity + "x " + itemStack.Descriptor.Name + " (" + itemStack.Weight / 1000.0f + "kg)");
         }

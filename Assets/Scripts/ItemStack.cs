@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assets.Scripts
 {
-    public class ItemStack : IItemStack
+    public class ItemStack : Destroyable, IItemStack
     {
         private IItemDescriptor _descriptor;
         private List<IItem> _items;
@@ -13,6 +13,7 @@ namespace Assets.Scripts
 
         public ItemStack(IItemDescriptor descriptor)
         {
+            _items = new List<IItem>();
             _descriptor = descriptor;
         }
 
@@ -21,7 +22,12 @@ namespace Assets.Scripts
             this._descriptor = null;
         }
 
-        public override bool Add(IItem item)
+        public T As<T>()
+        {
+            return (T)System.Convert.ChangeType(this, typeof(T));
+        }
+
+        public bool Add(IItem item)
         {
             if (_items.Contains(item))
                 return false;
@@ -30,33 +36,35 @@ namespace Assets.Scripts
             return true;
         }
 
-        public override bool AddQuantity(int quantity)
+        public bool AddQuantity(int quantity)
         {
+            for (int i = 0; i < quantity; i++)
+                _items.Add(this.Descriptor.Create());
             _quantity += quantity;
             return true;
         }
 
-        public override IItemDescriptor Descriptor
+        public IItemDescriptor Descriptor
         {
             get { return _descriptor; }
         }
 
-        public override List<IItem> Items
+        public List<IItem> Items
         {
             get { return _items; }
         }
 
-        public override int Quantity
+        public int Quantity
         {
             get { return _quantity; }
         }
 
-        public override float Weight
+        public float Weight
         {
             get { return _descriptor.Weight * _quantity; }
         }
 
-        public override float Volume
+        public float Volume
         {
             get { return _descriptor.Volume * _quantity; }
         }
