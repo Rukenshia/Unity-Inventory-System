@@ -9,7 +9,12 @@ namespace Assets.Scripts
     {
         List<IItemStack> Stacks { get; }
         bool AddStack(IItemStack stack);
+        bool CanAdd(IItemStack stack);
+        bool CanAdd(float volume);
+        bool Has(IItemDescriptor descriptor);
+        List<IItemStack> Get(IItemDescriptor descriptor);
+
+        bool MoveStack(IItemStack stack, IStorage newStorage);
         bool RemoveStack(IItemStack stack);
-        bool AddQuantity(IItemDescriptor descriptor);
     }
 }

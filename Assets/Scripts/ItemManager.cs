@@ -10,8 +10,8 @@ public class ItemManager : MonoBehaviour {
         _descriptors.Initialize();
 
         Storage s = (Storage)_descriptors.Find("Backpack").Create();
-        ItemStack stack = new ItemStack(_descriptors.Find("Whiskey Bottle"));
-        stack.AddQuantity(7);
+        ItemStack stack = new ItemStack(_descriptors.Find("Whiskey Bottle"), s);
+        stack.AddQuantity(8);
         s.AddStack(stack);
         stack = new ItemStack(_descriptors.Find("Botan"));
         stack.AddQuantity(1);

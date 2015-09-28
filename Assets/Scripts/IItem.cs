@@ -8,6 +8,7 @@ namespace Assets.Scripts
     public interface IItem : IDestroyable
     {
         IItemDescriptor Descriptor { get; }
+        IItemStack Stack { get; }
         float Weight { get; }
         float Volume { get; }
 

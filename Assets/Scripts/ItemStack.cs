@@ -8,6 +8,7 @@ namespace Assets.Scripts
     public class ItemStack : Destroyable, IItemStack
     {
         private IItemDescriptor _descriptor;
+        private IStorage _storage;
         private List<IItem> _items;
         private int _quantity;
 
@@ -17,14 +18,14 @@ namespace Assets.Scripts
             _descriptor = descriptor;
         }
 
+        public ItemStack(IItemDescriptor descriptor, IStorage storage) : this(descriptor)
+        {
+            Storage = storage;
+        }
+
         ~ItemStack()
         {
             this._descriptor = null;
-        }
-
-        public T As<T>()
-        {
-            return (T)System.Convert.ChangeType(this, typeof(T));
         }
 
         public bool Add(IItem item)
@@ -38,9 +39,48 @@ namespace Assets.Scripts
 
         public bool AddQuantity(int quantity)
         {
+            if (this.Storage != null && !this.Storage.CanAdd(this.Descriptor.Weight * quantity))
+                return false;
+
             for (int i = 0; i < quantity; i++)
                 _items.Add(this.Descriptor.Create());
             _quantity += quantity;
+            return true;
+        }
+
+        public bool Merge(IItemStack other)
+        {
+            if (other.Descriptor != this.Descriptor)
+                return false;
+
+            foreach (IItem item in other.Items)
+            {
+                other.Remove(item);
+                this.Add(item);
+            }
+
+            return true;
+        }
+
+        public bool Remove(IItem item)
+        {
+            if (!this.Items.Contains(item))
+                return false;
+
+            return this.Items.Remove(item);
+        }
+
+        public bool RemoveQuantity(int quantity, bool force = false)
+        {
+            if (this.Quantity < quantity)
+            {
+                if (!force)
+                    return false;
+
+                this.Items.Clear();
+                return true;
+            }
+            this.Items.RemoveRange(0, quantity);
             return true;
         }
 
@@ -56,17 +96,41 @@ namespace Assets.Scripts
 
         public int Quantity
         {
-            get { return _quantity; }
+            get { return this.Items.Count; }
+        }
+
+        public IStorage Storage
+        {
+            get { return _storage; }
+            set
+            {
+                if (!value.CanAdd(this))
+                    throw new Exception("Trying to add ItemStack to Storage that cant hold it.");
+
+                if (this.Storage != null)
+                    this.Storage.RemoveStack(this);
+
+                if (value == null)
+                {
+                    _storage = null;
+                    return;
+                }
+
+                if (!value.Stacks.Contains(this))
+                    value.AddStack(this);
+
+                _storage = value;
+            }
         }
 
         public float Weight
         {
-            get { return _descriptor.Weight * _quantity; }
+            get { return _descriptor.Weight * this.Quantity; }
         }
 
         public float Volume
         {
-            get { return _descriptor.Volume * _quantity; }
+            get { return _descriptor.Volume * this.Quantity; }
         }
     }
 }
