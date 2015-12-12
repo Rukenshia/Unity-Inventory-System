@@ -3,14 +3,14 @@
     "name": "Test Item",
     "description": "This is some nice item.",
     "weight": 20,
-    "volume": 0.2,
+	"size": 0,
     "type": "item"
   },
   {
     "name": "Botan",
     "description": "Puhi! Puhi!",
     "weight": 4000,
-    "volume": 10.8,
+	"size": 2,
     "type": "item",
     "attributes": {
       "something": "awesome",
@@ -20,19 +20,18 @@
   {
     "name": "Backpack",
     "description": "A lovely backpack.",
-    "weight": 4000,
-    "volume": 24800.0,
+    "weight": 1500,
+	"size": 3,
     "type": "storage",
     "attributes": {
-      "capacity": 38.0,
-	  "weight": 1500.0
+      "capacity": 30000.0
     }
   },
   {
     "name": "Whiskey Bottle",
     "description": "Everyone needs some whiskey sometimes.",
     "weight": 790.0,
-    "volume": 800.0,
+	"size": 1,
     "type": "consumable",
     "attributes": {
     }

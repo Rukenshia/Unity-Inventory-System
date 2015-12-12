@@ -10,7 +10,6 @@ namespace Assets.Scripts
         IItemDescriptor Descriptor { get; }
         IItemStack Stack { get; }
         float Weight { get; }
-        float Volume { get; }
 
         IConsumable AsConsumable();
         IStorage AsStorage();

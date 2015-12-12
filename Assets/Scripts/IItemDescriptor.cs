@@ -11,14 +11,21 @@ namespace Assets.Scripts
         Consumable,
         Storage
     };
+    public enum ItemSize
+    {
+        Tiny,
+        Small,
+        Medium,
+        Large,
+    };
 
-    public interface IItemDescriptor
+public interface IItemDescriptor
     {
         string Name { get; }
         string Description { get; }
         ItemType Type { get; }
         float Weight { get; }
-        float Volume { get; }
+        ItemSize Size { get; }
         Dictionary<string, SimpleJSON.JSONNode> Attributes { get; }
 
         IItem Create();

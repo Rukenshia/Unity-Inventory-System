@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using UnityEngine;
-
 namespace Assets.Scripts
 {
     class Storage : Item, IStorage
@@ -23,14 +21,20 @@ namespace Assets.Scripts
             return attr;
         }
 
-        public bool AddQuantity(IItemDescriptor descriptor)
+        public bool AddQuantity(IItemDescriptor descriptor, int quantity)
         {
-            return false;
+            List<IItemStack> stacks = this.Get(descriptor);
+            if (stacks.Count == 0)
+                return false;
+
+            // Always add to first stack when using this shortcut method.
+            // The 'CanAdd' requirement will be checked by AddQuantity, no need to double-call it.
+            return stacks[0].AddQuantity(quantity);
         }
 
         public bool AddStack(IItemStack stack)
         {
-            if (!this.CanAdd(stack))
+            if (!this.CanAdd(stack) || stack.Quantity == 0)
                 return false;
             _stacks.Add(stack);
             return true;
@@ -38,12 +42,12 @@ namespace Assets.Scripts
 
         public bool CanAdd(IItemStack stack)
         {
-            return !_stacks.Contains(stack) && this.Volume - this.ContentVolume >= stack.Volume;
+            return !_stacks.Contains(stack) && this.Capacity >= this.ContentWeight + stack.Weight;
         }
 
-        public bool CanAdd(float volume)
+        public bool CanAdd(float weight)
         {
-            return this.Volume - this.ContentVolume >= volume;
+            return this.Capacity >= this.ContentWeight + weight;
         }
 
         public List<IItemStack> Get(IItemDescriptor descriptor)
@@ -106,14 +110,14 @@ namespace Assets.Scripts
             }
         }
 
-        public float ContentVolume
+        public float ContentWeight
         {
             get
             {
-                float volume = 0.0f;
+                float weight = 0.0f;
                 foreach(IItemStack stack in _stacks)
-                    volume += stack.Volume;
-                return volume;
+                    weight += stack.Weight;
+                return weight;
             }
         }
 
@@ -121,10 +125,7 @@ namespace Assets.Scripts
         {
             get
             {
-                float weight = base.Weight;
-                foreach (IItemStack stack in _stacks)
-                    weight += stack.Weight;
-                return weight;
+                return base.Weight + this.ContentWeight;
             }
         }
     }

@@ -41,7 +41,7 @@ namespace Assets.Scripts
         {
             if (this.Storage != null && !this.Storage.CanAdd(this.Descriptor.Weight * quantity))
                 return false;
-
+            
             for (int i = 0; i < quantity; i++)
                 _items.Add(this.Descriptor.Create());
             _quantity += quantity;
@@ -126,11 +126,6 @@ namespace Assets.Scripts
         public float Weight
         {
             get { return _descriptor.Weight * this.Quantity; }
-        }
-
-        public float Volume
-        {
-            get { return _descriptor.Volume * this.Quantity; }
         }
     }
 }

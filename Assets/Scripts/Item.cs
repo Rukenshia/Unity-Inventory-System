@@ -31,11 +31,6 @@ namespace Assets.Scripts
             get { return _stack; }
         }
 
-        public virtual float Volume
-        {
-            get { return _descriptor.Volume; }
-        }
-
         public virtual float Weight
         {
             get { return _descriptor.Weight; }

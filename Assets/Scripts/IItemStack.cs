@@ -17,7 +17,6 @@ namespace Assets.Scripts
         bool Merge(IItemStack other);
 
         int Quantity { get; }
-        float Volume { get; }
         float Weight { get; }
     }
 }

@@ -12,6 +12,7 @@ namespace Assets.Scripts
         private string _description;
         private float _weight;
         private float _volume;
+        private ItemSize _size;
         private System.Type _class;
         private ItemType _itemType;
         private Dictionary<string, SimpleJSON.JSONNode> _attributes;
@@ -23,6 +24,7 @@ namespace Assets.Scripts
             _description = data["description"];
             _weight = data["weight"].AsFloat;
             _volume = data["volume"].AsFloat;
+            _size = (ItemSize)data["size"].AsInt;
             
             string type = data["type"];
 
@@ -82,9 +84,9 @@ namespace Assets.Scripts
             get { return _weight; }
         }
 
-        public float Volume
+        public ItemSize Size
         {
-            get { return _volume; }
+            get { return _size; }
         }
 
         public Dictionary<string, SimpleJSON.JSONNode> Attributes

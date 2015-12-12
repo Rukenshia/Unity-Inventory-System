@@ -2,3 +2,4 @@ ProjectSettings/
 Temp/
 .vs/
 Library/
+*.csproj
